@@ -80,13 +80,6 @@ int clear_lcd1,time_lcd1;
 int y=0;
 int bandera_revision=0;
 int16 cntbnd=0;
-   char term[3], *ptr;
-   char data1[14];
-   char data2[10];
-   char data3[10];
-   char data4[10];
-   char data5[10];
-   int caso_valor=0;
 
 /*
 char texto1[]= "GRABAR_DAT"; //HISTORIAL pic-pic
@@ -354,7 +347,6 @@ clear_lcd1=0;
 
 output_low(HB);
 bandera_revision=1;
-caso_valor=0;
 
 while(TRUE){
 ///////////////////////preuba comunicacion serial con poste trasero///////////////
@@ -473,7 +465,7 @@ while (kbhit(GPS)!=1 || cntbnd >= 200)
       rd_eeprom();//valida dato recibido para ver si es una palabra de control
       //int caso_valor = evaluar_string("BORRAR_ALL\r");
       //fprintf(monitor,"XX:%s",XX);
-      caso_valor = evaluar_string(XX);
+      int caso_valor = evaluar_string(XX);
       //int caso_valor;
       //evaluar_string('B');
       //char textosearch[]= "PASAJEROS:";
@@ -508,7 +500,6 @@ while (kbhit(GPS)!=1 || cntbnd >= 200)
                   transmitir=1;
                   lcd_gotoxy(9,4);
                   lcd_putc("C2OK");
-                  
                   break;}
           case 6: {//TEST DE COMUNICACION SERIAL
                   clear_lcd1=1;
@@ -529,16 +520,7 @@ while (kbhit(GPS)!=1 || cntbnd >= 200)
                   lcd_gotoxy(9,4);
                   lcd_putc("Sub2");
                   break;}
-          default:{
-                  lcd_gotoxy(9,2);
-                  printf(lcd_putc,"c=0");
-                  }
       }//end switch
-      caso_valor=0;
-      //lcd_gotoxy(9,1);
-      //printf(lcd_putc,"%Ld ",b);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
-      //printf(lcd_putc,"%d ",caso_valor);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
-      //delay_ms(3000);
       memset(XX, 0, sizeof(XX) );
       time_clr=0;
       f_clr=1;
@@ -683,7 +665,12 @@ void enviop1(){//Convierte a enteros la cadena recibida por el poste esclavo
        */
    
    
-
+   char string[50], term[3], *ptr;
+   char data1[14];
+   char data2[10];
+   char data3[10];
+   char data4[10];
+   char data5[10];
  
    //strcpy(string,XX);
    //char str[] ="This is - www.tutorialspoint.com - website";
@@ -692,7 +679,7 @@ void enviop1(){//Convierte a enteros la cadena recibida por el poste esclavo
    //lcd_gotoxy(9,2);
    //printf(lcd_putc,"%s",ptr);
     int conteo_wl=0;
-  // while(ptr!=0) {
+   while(ptr!=0) {
          
          strcpy(data1,ptr);                        // 1ra Palabra
          strcpy(data2, strtok(NULL , term));       // 2ra Palabra
@@ -706,40 +693,31 @@ void enviop1(){//Convierte a enteros la cadena recibida por el poste esclavo
          conteo_wl++;
          sub_atras = atoi32(data2);
          baj_atras = atoi32(data3);
-         lcd_gotoxy(14,3);
-          printf(lcd_putc,"S2:%Ld ",sub_atras);
-          lcd_gotoxy(14,4);
-          printf(lcd_putc,"B2:%Ld ",baj_atras);
-          //delay_ms(3000);
          
-         /*
          printf(lcd_putc,"\f");
          lcd_gotoxy(1,1);
-         printf(lcd_putc,"%s->%ld",data2,sub_atras);
+         printf(lcd_putc,"%s%ld",data2,sub_atras);
          lcd_gotoxy(1,2);
-         printf(lcd_putc,"%s->%ld",data3,baj_atras);
+         printf(lcd_putc,"%s%ld",data3,baj_atras);
          lcd_gotoxy(1,3);
          printf(lcd_putc,"%s",data4);
          lcd_gotoxy(1,4);
-         printf(lcd_putc,"%s",data5);
-        delay_ms(5000);
-        */
+         printf(lcd_putc,"%ld",data5);
+        delay_ms(2000);
          
-      //}
+      }
       
-      
+   
    //char conteo_poste_trasero;
    //strncpy (conteo_poste_trasero, XX,  10);
-   /*
    strcpy ( entran, data2);
-   entran[4] = '\0';   // null character manually added 
+   entran[4] = '\0';   /* null character manually added */
    strcpy ( salen, data3);
-   salen[4] = '\0';   // null character manually added 
+   salen[4] = '\0';   /* null character manually added */
    strcpy ( bloqueado, data4);
-   bloqueado[3] = '\0';   // null character manually added 
+   bloqueado[3] = '\0';   /* null character manually added */
    strcpy ( tempo_tc, data5);
-   tempo_tc[4] = '\0';   //null character manually added 
-   */
+   tempo_tc[4] = '\0';   /* null character manually added */
    //lcd_gotoxy(12,2);
    //printf(lcd_putc,"%c%c",data1[0],data1[8]);
    
@@ -758,15 +736,13 @@ void envio(){//crea paquete para enviar al modulo GPRS
    if(convertir_to_entero(entran[1]) >0) for(i=0;i< convertir_to_entero(entran[1]);i++) temporal1=temporal1+100;
    if(convertir_to_entero(entran[2]) >0) for(i=0;i< convertir_to_entero(entran[2]);i++) temporal1=temporal1+10;
    
-   //sub_atras = atol(entran);
-  // sub_atras = atoi32(data2);
+   sub_atras = atol(entran);
    //sub_atras=temporal1=temporal1+convertir_to_entero(entran[3]);
    
    if(convertir_to_entero(salen[0]) >0) for(i=0;i< convertir_to_entero(salen[0]);i++) temporal2=temporal2+1000;
    if(convertir_to_entero(salen[1]) >0) for(i=0;i< convertir_to_entero(salen[1]);i++) temporal2=temporal2+100;
    if(convertir_to_entero(salen[2]) >0) for(i=0;i< convertir_to_entero(salen[2]);i++) temporal2=temporal2+10;
-   //baj_atras = atol(salen);
-   //baj_atras = atoi32(data3);
+   baj_atras = atol(salen);
    //baj_atras=temporal2=temporal2+convertir_to_entero(salen[3]);
    
    if(convertir_to_entero(bloqueado[0]) >0) for(i=0;i< convertir_to_entero(bloqueado[0]);i++) temporal3=temporal3+100;
@@ -781,7 +757,6 @@ void envio(){//crea paquete para enviar al modulo GPRS
 //!   printf(lcd_putc,"S:%Lu",total2_t);
 //!   lcd_gotoxy(16,2);//
 //!   printf(lcd_putc,"R:%Lu",tempo_tn);
-   
    /////////////////
    leer_conta2();
    if( total2_t== tempo_tn ) {//dato recibido correcto
@@ -1618,7 +1593,6 @@ void lcd_cuentas(){//Escribe las cuenta en LCD
        printf(lcd_putc,"B1:%Ld ",salieront);
        lcd_gotoxy(14,3);
        printf(lcd_putc,"S2:%Ld ",sub_atras);
-       //printf(lcd_putc,"N2:");
        lcd_gotoxy(14,4);
        printf(lcd_putc,"B2:%Ld ",baj_atras);
     }
@@ -1630,7 +1604,6 @@ void lcd_cuentas(){//Escribe las cuenta en LCD
        lcd_putc("B1:    ");
        lcd_gotoxy(14,3);
        printf(lcd_putc,"S2:%Ld ",entraront);
-       //printf(lcd_putc,"S2:v");
        lcd_gotoxy(14,4);
        printf(lcd_putc,"B2:%Ld ",salieront);
     }
@@ -1757,8 +1730,8 @@ int evaluar_string(char *command[]){
       if(XX[1]=='A' && XX[2]=='S' && XX[3]=='A' && XX[4]=='J' && XX[5]=='E' && XX[6]=='R' && XX[7]=='O' && XX[8]=='S')
       {
          conteo_command = 5;
-        // lcd_gotoxy(9,2);
-        // printf(lcd_putc,"C=5");
+         lcd_gotoxy(9,2);
+         printf(lcd_putc,"C=5");
       }
     
    return conteo_command;

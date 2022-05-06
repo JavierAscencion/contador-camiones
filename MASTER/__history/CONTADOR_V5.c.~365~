@@ -535,10 +535,10 @@ while (kbhit(GPS)!=1 || cntbnd >= 200)
                   }
       }//end switch
       caso_valor=0;
-      //lcd_gotoxy(9,1);
+      lcd_gotoxy(9,1);
       //printf(lcd_putc,"%Ld ",b);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
-      //printf(lcd_putc,"%d ",caso_valor);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
-      //delay_ms(3000);
+      printf(lcd_putc,"%d ",caso_valor);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
+      delay_ms(3000);
       memset(XX, 0, sizeof(XX) );
       time_clr=0;
       f_clr=1;
@@ -692,7 +692,7 @@ void enviop1(){//Convierte a enteros la cadena recibida por el poste esclavo
    //lcd_gotoxy(9,2);
    //printf(lcd_putc,"%s",ptr);
     int conteo_wl=0;
-  // while(ptr!=0) {
+   while(ptr!=0) {
          
          strcpy(data1,ptr);                        // 1ra Palabra
          strcpy(data2, strtok(NULL , term));       // 2ra Palabra
@@ -707,10 +707,10 @@ void enviop1(){//Convierte a enteros la cadena recibida por el poste esclavo
          sub_atras = atoi32(data2);
          baj_atras = atoi32(data3);
          lcd_gotoxy(14,3);
-          printf(lcd_putc,"S2:%Ld ",sub_atras);
+          printf(lcd_putc,"I2:%Ld ",sub_atras);
           lcd_gotoxy(14,4);
-          printf(lcd_putc,"B2:%Ld ",baj_atras);
-          //delay_ms(3000);
+          printf(lcd_putc,"I2:%Ld ",baj_atras);
+          delay_ms(3000);
          
          /*
          printf(lcd_putc,"\f");
@@ -725,7 +725,7 @@ void enviop1(){//Convierte a enteros la cadena recibida por el poste esclavo
         delay_ms(5000);
         */
          
-      //}
+      }
       
       
    //char conteo_poste_trasero;
@@ -1617,10 +1617,10 @@ void lcd_cuentas(){//Escribe las cuenta en LCD
        lcd_gotoxy(14,2);
        printf(lcd_putc,"B1:%Ld ",salieront);
        lcd_gotoxy(14,3);
-       printf(lcd_putc,"S2:%Ld ",sub_atras);
+       printf(lcd_putc,"N2:%Ld ",sub_atras);
        //printf(lcd_putc,"N2:");
        lcd_gotoxy(14,4);
-       printf(lcd_putc,"B2:%Ld ",baj_atras);
+       printf(lcd_putc,"N2:%Ld ",baj_atras);
     }
     else{
        printf(lcd_putc,"2 %c%c%c%c%c ",version[0],version[1],version[2],version[3],version[4]);
@@ -1629,8 +1629,8 @@ void lcd_cuentas(){//Escribe las cuenta en LCD
        lcd_gotoxy(14,2);
        lcd_putc("B1:    ");
        lcd_gotoxy(14,3);
-       printf(lcd_putc,"S2:%Ld ",entraront);
-       //printf(lcd_putc,"S2:v");
+       //printf(lcd_putc,"S2:%Ld ",entraront);
+       printf(lcd_putc,"S2:v");
        lcd_gotoxy(14,4);
        printf(lcd_putc,"B2:%Ld ",salieront);
     }

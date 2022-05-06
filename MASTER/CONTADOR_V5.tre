@@ -1,5 +1,5 @@
 ÀÄContadores_V5
-   ÃÄMAIN  0/2110  Ram=1
+   ÃÄMAIN  0/2124  Ram=1
    ³  ÃÄ@cinit1  (Inline)  Ram=0
    ³  ÃÄlcd_init  0/116  Ram=2
    ³  ³  ÃÄ@delay_ms1  0/40  Ram=1
@@ -186,12 +186,8 @@
    ³  ³  ÀÄ*
    ³  ÃÄ@GETCH_2_  0/120  Ram=4
    ³  ÃÄrd_eeprom  0/170  Ram=5
-   ³  ÃÄevaluar_string  0/168  Ram=6
-   ³  ³  ÃÄstrcoll  0/122  Ram=5
-   ³  ³  ÃÄlcd_gotoxy  0/82  Ram=4
-   ³  ³  ³  ÀÄ*
-   ³  ³  ÀÄ@PSTRINGC_943  0/32  Ram=2
-   ³  ³     ÀÄ*
+   ³  ÃÄevaluar_string  0/142  Ram=6
+   ³  ³  ÀÄstrcoll  0/122  Ram=5
    ³  ÃÄlcd_gotoxy  0/82  Ram=4
    ³  ³  ÀÄ*
    ³  ÃÄ@PRINTF_D_943  0/196  Ram=6
@@ -207,7 +203,6 @@
    ³  ³     ÀÄ*
    ³  ÃÄlcd_putc  0/96  Ram=1
    ³  ³  ÀÄ*
-   ³  ÃÄ@goto12255  0/42  Ram=0
    ³  ÃÄlimpiar  0/108  Ram=0
    ³  ³  ÀÄ*
    ³  ÃÄ@PSTRINGC_9600_31766_31767  0/34  Ram=2
@@ -225,11 +220,43 @@
    ³  ³  ÃÄlcd_putc  0/96  Ram=1
    ³  ³  ³  ÀÄ*
    ³  ³  ÀÄ@PSTRINGC_9600_31766_31767  0/34  Ram=2
-   ³  ÃÄenviop1  0/384  Ram=3
+   ³  ÃÄenviop1  0/566  Ram=2
    ³  ³  ÃÄ@MEMSET  0/26  Ram=0
    ³  ³  ÃÄ@MEMSET  0/26  Ram=0
    ³  ³  ÃÄ@MEMSET  0/26  Ram=0
-   ³  ³  ÀÄ@MEMSET  0/26  Ram=0
+   ³  ³  ÃÄ@MEMSET  0/26  Ram=0
+   ³  ³  ÃÄ@const1170  0/20  Ram=0
+   ³  ³  ÃÄstrtok  0/176  Ram=10
+   ³  ³  ³  ÃÄstrspn  0/144  Ram=9
+   ³  ³  ³  ÀÄstrpbrk  0/122  Ram=9
+   ³  ³  ÃÄstrtok  0/176  Ram=10
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄstrtok  0/176  Ram=10
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄstrtok  0/176  Ram=10
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄstrtok  0/176  Ram=10
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄstrtok  0/176  Ram=10
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄatoi32  0/660  Ram=16
+   ³  ³  ÃÄatoi32  0/660  Ram=16
+   ³  ³  ÃÄlcd_gotoxy  0/82  Ram=4
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄ@PSTRINGCN_943  0/40  Ram=3
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄ@PRINTF_LD_943  0/252  Ram=9
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄlcd_putc  0/96  Ram=1
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄlcd_gotoxy  0/82  Ram=4
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄ@PSTRINGCN_943  0/40  Ram=3
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄ@PRINTF_LD_943  0/252  Ram=9
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÀÄlcd_putc  0/96  Ram=1
+   ³  ³     ÀÄ*
    ³  ÃÄlcd_gotoxy  0/82  Ram=4
    ³  ³  ÀÄ*
    ³  ÃÄ@PSTRINGC_943  0/32  Ram=2
@@ -239,6 +266,10 @@
    ³  ÃÄ@PSTRINGC_943  0/32  Ram=2
    ³  ³  ÀÄ*
    ³  ÃÄ@PSTRINGC_9600_31766_31767  0/34  Ram=2
+   ³  ÃÄlcd_gotoxy  0/82  Ram=4
+   ³  ³  ÀÄ*
+   ³  ÃÄ@PSTRINGC_943  0/32  Ram=2
+   ³  ³  ÀÄ*
    ³  ÃÄlcd_gotoxy  0/82  Ram=4
    ³  ³  ÀÄ*
    ³  ÃÄ@PSTRINGC_943  0/32  Ram=2
@@ -262,7 +293,7 @@
    ³  ³  ÀÄ*
    ³  ÃÄ@PSTRINGC_943  0/32  Ram=2
    ³  ³  ÀÄ*
-   ³  ÃÄenvia2  0/334  Ram=2
+   ³  ÃÄenvia2  0/342  Ram=2
    ³  ³  ÃÄ@MEMSET  0/26  Ram=0
    ³  ³  ÃÄ@MEMSET  0/26  Ram=0
    ³  ³  ÃÄ@MEMSET  0/26  Ram=0
@@ -270,18 +301,18 @@
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄ@PSTRINGCN_924  0/40  Ram=3
    ³  ³  ³  ÀÄ@PUTCHAR_2_  0/78  Ram=1
-   ³  ³  ÃÄ@PRINTF_LU_924  0/196  Ram=9
+   ³  ³  ÃÄ@PRINTF_LU_924  0/198  Ram=9
    ³  ³  ³  ÀÄ@PUTCHAR_2_  0/78  Ram=1
    ³  ³  ÃÄ@PUTCHAR_2_  0/78  Ram=1
-   ³  ³  ÃÄ@PRINTF_LU_924  0/196  Ram=9
+   ³  ³  ÃÄ@PRINTF_LU_924  0/198  Ram=9
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄ@PSTRINGCN_924  0/40  Ram=3
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄ@PRINTF_LU_924  0/196  Ram=9
+   ³  ³  ÃÄ@PRINTF_LU_924  0/198  Ram=9
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄ@PSTRINGCN_924  0/40  Ram=3
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄ@PRINTF_U_924  0/124  Ram=2
+   ³  ³  ÃÄ@PRINTF_U_924  0/134  Ram=2
    ³  ³  ³  ÃÄ@DIV88  0/44  Ram=3
    ³  ³  ³  ÃÄ@PUTCHAR_2_  0/78  Ram=1
    ³  ³  ³  ÃÄ@DIV88  0/44  Ram=3
@@ -297,9 +328,7 @@
    ³  ³  ³  ÀÄ*
    ³  ³  ÀÄ@PSTRINGC_943  0/32  Ram=2
    ³  ³     ÀÄ*
-   ³  ÃÄenvio  0/972  Ram=2
-   ³  ³  ÃÄconvertir_to_entero  0/168  Ram=3
-   ³  ³  ÃÄconvertir_to_entero  0/168  Ram=3
+   ³  ÃÄenvio  0/916  Ram=2
    ³  ³  ÃÄconvertir_to_entero  0/168  Ram=3
    ³  ³  ÃÄconvertir_to_entero  0/168  Ram=3
    ³  ³  ÃÄconvertir_to_entero  0/168  Ram=3
@@ -330,22 +359,22 @@
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄ@PSTRINGCN_924  0/40  Ram=3
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄ@PRINTF_LU_924  0/196  Ram=9
+   ³  ³  ÃÄ@PRINTF_LU_924  0/198  Ram=9
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄ@PUTCHAR_2_  0/78  Ram=1
-   ³  ³  ÃÄ@PRINTF_LU_924  0/196  Ram=9
+   ³  ³  ÃÄ@PRINTF_LU_924  0/198  Ram=9
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄ@PUTCHAR_2_  0/78  Ram=1
-   ³  ³  ÃÄ@PRINTF_LU_924  0/196  Ram=9
+   ³  ³  ÃÄ@PRINTF_LU_924  0/198  Ram=9
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄ@PUTCHAR_2_  0/78  Ram=1
-   ³  ³  ÃÄ@PRINTF_LU_924  0/196  Ram=9
+   ³  ³  ÃÄ@PRINTF_LU_924  0/198  Ram=9
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄ@PUTCHAR_2_  0/78  Ram=1
-   ³  ³  ÃÄ@PRINTF_LU_924  0/196  Ram=9
+   ³  ³  ÃÄ@PRINTF_LU_924  0/198  Ram=9
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄ@PUTCHAR_2_  0/78  Ram=1
-   ³  ³  ÃÄ@PRINTF_U_924  0/124  Ram=2
+   ³  ³  ÃÄ@PRINTF_U_924  0/134  Ram=2
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄ@PSTRINGCN_924  0/40  Ram=3
    ³  ³  ³  ÀÄ*
@@ -428,7 +457,7 @@
    ³     ³  ÀÄ@PSTRINGC_943  0/32  Ram=2
    ³     ³     ÀÄ*
    ³     ÃÄcontando1  0/80  Ram=0
-   ³     ³  ÃÄ@goto12764  0/50  Ram=0
+   ³     ³  ÃÄ@goto12782  0/50  Ram=0
    ³     ³  ÃÄdetecta_suma  0/366  Ram=1
    ³     ³  ³  ÃÄwrite_ent  0/54  Ram=2
    ³     ³  ³  ³  ÀÄ*
@@ -506,7 +535,7 @@
    ³     ³  ÀÄ@PSTRINGC_943  0/32  Ram=2
    ³     ³     ÀÄ*
    ³     ÃÄcontando2  0/80  Ram=0
-   ³     ³  ÃÄ@goto12805  0/50  Ram=0
+   ³     ³  ÃÄ@goto12823  0/50  Ram=0
    ³     ³  ÃÄdetecta_suma  0/366  Ram=1
    ³     ³  ³  ÀÄ*
    ³     ³  ÃÄdetecta_suma  0/366  Ram=1
@@ -565,7 +594,7 @@
    ³     ³  ÀÄ@PSTRINGC_943  0/32  Ram=2
    ³     ³     ÀÄ*
    ³     ÃÄcontando3  0/80  Ram=0
-   ³     ³  ÃÄ@goto12846  0/50  Ram=0
+   ³     ³  ÃÄ@goto12864  0/50  Ram=0
    ³     ³  ÃÄdetecta_suma  0/366  Ram=1
    ³     ³  ³  ÀÄ*
    ³     ³  ÃÄdetecta_suma  0/366  Ram=1
@@ -590,6 +619,6 @@
    ³        ÀÄ*
    ÃÄTIMER1_isr  0/180  Ram=0
    ÃÄTIMER3_isr  0/20  Ram=0
-   ÀÄisr_rs232  0/110  Ram=4
+   ÀÄisr_rs232  0/90  Ram=4
       ÀÄ@GETCH_BIU_1  0/60  Ram=2
          ÀÄ@delay_us1  0/34  Ram=1

@@ -535,10 +535,10 @@ while (kbhit(GPS)!=1 || cntbnd >= 200)
                   }
       }//end switch
       caso_valor=0;
-      //lcd_gotoxy(9,1);
+      lcd_gotoxy(9,1);
       //printf(lcd_putc,"%Ld ",b);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
-      //printf(lcd_putc,"%d ",caso_valor);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
-      //delay_ms(3000);
+      printf(lcd_putc,"%d ",caso_valor);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
+      delay_ms(3000);
       memset(XX, 0, sizeof(XX) );
       time_clr=0;
       f_clr=1;
