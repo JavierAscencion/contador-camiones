@@ -42,8 +42,8 @@ D02.6 2019/12/09 Cambia la forma de contar
 #define salida02  PIN_C4//Indicador de Sensado
 #define salida03  PIN_C5//Relay
 
-#define HB PIN_E0
-#define EN PIN_E1
+#define HB PIN_E0  //habilita recepcion de datos en gprs
+#define EN PIN_E1  //monitor de "envio listo" desde gprs
 
 
 const int s_cta=5;//numero de veces para verificar obsturbcion (sensibilidad de deteccion)
@@ -80,59 +80,20 @@ int clear_lcd1,time_lcd1;
 int y=0;
 int bandera_revision=0;
 int16 cntbnd=0;
-   char term[3], *ptr;
-   char data1[14];
-   char data2[10];
-   char data3[10];
-   char data4[10];
-   char data5[10];
-   int caso_valor=0;
 
-/*
-char texto1[]= "GRABAR_DAT"; //HISTORIAL pic-pic
-char texto2[]= "LEERCUENTA"; //LEE HISTORIAL pic-pic
-char texto3[]= "BORRAR_ALL"; //BORRA CONTADORES actuales pic-pic
-char texto4[]= "SOLICITADO"; //solicita AL OTRO SEGUINT LOS PASAJEROS CONTADOS(falta definir la condicion que la genera) pic-pic
-char texto5[]= "PASAJEROS:"; //recibe el dato del otro seguint, lo suma, reporta y guarda
-char texto6[]= "SERIALTEST"; //
-char texto7[]= "SERIAL_TOK"; //
-char texto8[]= "SUBIENDOC2"; //Notificacion que suben por atras
-char texto9[]= "SINFUNCION"; //
-char texto []= "          ";
-char version[]="V5.01";//<---Version de codigo de contador
+// variables temporales para la conversion de string a entero de datos seriales de la cuenta de pasajeros del poste trasero///
+char term[3], *ptr;
+char data1[14];
+char data2[10];
+char data3[10];
+char data4[10];
+char data5[10];
+int caso_valor=0;
 
-
-char grabar_historial_pic[]= "GRABAR_DAT"; //HISTORIAL pic-pic
-char leer_historial_pic[]= "LEERCUENTA"; //LEE HISTORIAL pic-pic
-char borrar_todo[]= "BORRAR_ALL"; //BORRA CONTADORES actuales pic-pic
-char solicitar[]= "SOLICITADO"; //solicita AL OTRO SEGUINT LOS PASAJEROS CONTADOS(falta definir la condicion que la genera) pic-pic
-char conteo_poste_trasero[]= "PASAJEROS:"; //recibe el dato del otro seguint, lo suma, reporta y guarda
-char prueba_serial[]= "SERIALTEST"; //
-char serial_ok[]= "SERIAL_TOK"; //
-char suben_poste_trasero[]= "SUBIENDOC2"; //Notificacion que suben por atras
-char sin_funcion[]= "SINFUNCION"; //
-char espacios []= "          ";
-char version_firmware[]="V5.01";//<---Version de codigo de contador
-*/
-//char textosearch[] = {"GRABAR_DAT","LEERCUENTA","BORRAR_ALL","SOLICITADO","PASAJEROS:","SERIALTEST","SERIAL_TOK","SUBIENDOC2","SINFUNCION","          ","V5.01"};
-/*
-char *textosearch[11] =    { "GRABAR_DAT\r",
-                             "LEERCUENTA\r",
-                             "BORRAR_ALL\r",
-                             "SOLICITADO\r",
-                             "PASAJEROS:\r",
-                             "SERIALTEST\r",
-                             "SERIAL_TOK\r",
-                             "SUBIENDOC2\r",
-                             "SINFUNCION\r",
-                             "          \r",
-                             "V5.01     \r"
-                           };
-*/
-
+//lista de comandos para contadores ///
 char *textosearch[11] =    { "V5.01     \r",
                              "BORRAR_ALL\r",
-                             "GRABAR_DAT\r",//GRABAR_DAT
+                             "GRABAR_DAT\r",
                              "LEERCUENTA\r",
                              "SOLICITADO\r",
                              "PASAJEROS:\r",
@@ -140,14 +101,10 @@ char *textosearch[11] =    { "V5.01     \r",
                              "SERIAL_TOK\r",
                              "SUBIENDOC2\r",
                              "SINFUNCION\r",
-                             "          \r"
-                            
+                             "          \r"                           
                            };
 
-
-
 char version[]="V5.02";//<---Version de codigo de contador
-
 
 /////EEPROM///////////
 const int word_size =10;//TAMAÑO DE LOS DATOS EN EEPROM//antes 8
@@ -233,58 +190,31 @@ void TIMER1_isr(void){
 set_timer1(set_timer);// 10ms
 }
 //****************************************************************************//
-/*
-#int_rda
-void isr_rs232(){ //escucha segundo poste
-i=0; // CONTADOR DE ARREGLO SERIAL INICIADO
-   while (i <= size_s){
-         XX[i] = fgetc(monitor);//se captura el dato del serial monitor(comunicacion entre pics)
-        i++;
-   }
-j=1;
-//sub_cta1=sub_cta2=sub_cta3=sub_cta4=sub_cta5=sub_cta6=0;//reinicia la cuenta para detectar sensores
-}
-*/
 
 //-----------------------------------------------------------------------------
-
+//timer para la el tiempo de espera del puerto serial emulado, datos del gprs//
 #int_TIMER3
 void  TIMER3_isr(void) 
 {
-  // output_toggle(salida01); 
-   cntbnd++;
-   
-  // if(cntbnd>=5000){ ///3  ORIGINAL 13889
-  // lcd_gotoxy(12,2);
-   //printf(lcd_putc,"%Ld",cntbnd);
-   //output_toggle(salida03);
-   
-  // cntbnd=0;
-  // }
-  
+   cntbnd++;  //bandera de conteo de timepo de espera de para puerto serial emlado
    set_timer3(65036); 
    
 }
 
 
 //-----------------------------------------------------------------------------
-
+// captura de datos seriales entre postes, delantero y trasero /////////////
 #int_rda
 void isr_rs232(){ //escucha segundo poste
 disable_interrupts(GLOBAL);//deshabilita interrupciones globales
 i=0; // CONTADOR DE ARREGLO SERIAL INICIADO
-
    while(i<=30){
    XX[i] = fgetc(monitor);
    i++;
    if(XX[i]==13)break;
    };//se captura el dato del serial monitor(comunicacion entre pics)
-   
-   
-  // XX[i]=fgetc(monitor);
 j=1;
 y=1;
-//fprintf(monitor,"XX:%s",XX);
 //sub_cta1=sub_cta2=sub_cta3=sub_cta4=sub_cta5=sub_cta6=0;//reinicia la cuenta para detectar sensores
 }
 
@@ -313,10 +243,6 @@ if(ini!=1){//Verifica si es la primera vez que se enciende el poste y graba conf
    write_eeprom(100,1);//Graba inicio
    limpiar();//pone en 0 el registro de cuentas almacenadas.
 }
-
-//llaves();//Graba instrucciones de control en eeprom
-///////////////////////////////lee que tienen la memoria eeprom//////////////////////////////////
-//rd_eeprom_inicio();
 /////////////////////////////////////////////////////////////////////////////////////////////////
 entraron_total();//carga el total de entradas registradas
 salieron_total();//carga el total de salidas registradas
@@ -352,22 +278,17 @@ output_low(salida02);
 sub_atras=baj_atras=0;
 clear_lcd1=0;
 
-output_low(HB);
+output_low(HB); //esperamos a que se aliste un dato del puerto serial emulado
 bandera_revision=1;
 caso_valor=0;
 
 while(TRUE){
-///////////////////////preuba comunicacion serial con poste trasero///////////////
- //fprintf(monitor,"SOLICITADO");//4
- //delay_ms(100);
+//solo para reinicializar interrupciones despues de obtener datos por puerto serial nato
  if(y==1){
-  //fprintf(monitor,"XX=%c%c%c%c%c%c%c",XX[0],XX[1],XX[2],XX[3],XX[4],XX[5],XX[6]);
-  //fprintf(monitor,"XX=%s",XX);
   enable_interrupts(GLOBAL);//habilita interrupciones globales
   y=0;
  }
- 
-//////////////////////////////////////////////////////////////////////////////////
+//////////////////////boton para reset cuenta////////////////////////////////////////////
    if(tem_res!=input(rst_cta) ){//BOTON DE RESET DE CUENTA
       delay_ms(50);
       if(tem_res!=input(rst_cta) ){
@@ -379,112 +300,48 @@ while(TRUE){
          }
       }
    }
-//!   
-/*
-   if( kbhit(GPS) && master ){//escucha gsm
-       i=0; // CONTADOR DE ARREGLO SERIAL INICIADO
-       XX[i] = fgetc(GPS);
-       i++;
-       if( (XX[0]>=65)&&(XX[0]<=90) ){//validar no sea ruido
-          while (i <= word_size){
-                XX[i] = fgetc(GPS);
-                i++;
-          }
-          if(XX[1]=='R') XX[0]='G';
-          j=1;
-       }///
-      // sub_cta1=sub_cta2=sub_cta3=sub_cta4=sub_cta5=sub_cta6=0;
-   }//end gps
-//!
-*/
-
-//------------------------------------------------------------------------------
+//-------pines de monitoreo de datos seriales por puerto emulado----------------------------
 if(input(EN) == 1  && bandera_revision == 1){
-  output_high(HB);
-  cntbnd=0; 
-  bandera_revision=0;
-  output_high(salida03);
-  //lcd_gotoxy(12,1);
-   //printf(lcd_putc,"Recibi bandera");
-  //while(kbhit(GPS) != 1);
-// delay_ms(200);
-while (kbhit(GPS)!=1 || cntbnd >= 200)
-{
-  // lcd_gotoxy(12,2);
-  // printf(lcd_putc,"WT");
-  bandera_revision=1;
-}
-  // lcd_gotoxy(12,3);
-  // printf(lcd_putc,"%x",fgetc(GPS));
-  XX[0] = fgetc(GPS);
- // lcd_gotoxy(12,3);
-  //printf(lcd_putc,"%c",XX[0]);
-  if(XX[0]==63)
-  {
-  output_low(salida03);
-      j=1;
-      sub_cta1=sub_cta2=sub_cta3=sub_cta4=sub_cta5=sub_cta6=0;
-      XX[0] = 'B';
-      XX[1] = 'O';
-      XX[2] = 'R';
-      XX[3] = 'R';
-      XX[4] = 'A';
-      XX[5] = 'R';
-      XX[6] = '_';
-      XX[7] = 'A';
-      XX[8] = 'L';
-      XX[9] = 'L';
-      XX[10] = '\n';
-      output_low(HB);
-      bandera_revision=1;
-  }
+     output_high(HB); //avisa que ya está listo para recibir dato serial
+     cntbnd=0; 
+     bandera_revision=0;
+     output_high(salida03);
+      while (kbhit(GPS)!=1 || cntbnd >= 200) /// espera a que se compelte dato serial o timer se agote
+      {
+        bandera_revision=1;
+      }
+     XX[0] = fgetc(GPS);
+     // si el comando es ?, es coomando valido de solicitud de borrar cuenta
+     if(XX[0]==63)
+     {
+     output_low(salida03);
+         j=1;
+         sub_cta1=sub_cta2=sub_cta3=sub_cta4=sub_cta5=sub_cta6=0; //se inicializa cuenta pasajeros
+         XX[0] = 'B';
+         XX[1] = 'O';
+         XX[2] = 'R';
+         XX[3] = 'R';
+         XX[4] = 'A';
+         XX[5] = 'R';
+         XX[6] = '_';
+         XX[7] = 'A';
+         XX[8] = 'L';
+         XX[9] = 'L';
+         XX[10] = '\n';
+         output_low(HB); // se reinicia la espera de nuevo dato serial
+         bandera_revision=1;
+     }
  
- /*
-   if( kbhit(GPS) && master ){//escucha gsm
-       //for (i=0;i<=10;++i){
-      // lcd_gotoxy(12,3);
-       //printf(lcd_putc,"%c",fgetc(GPS));
-        i=0; // CONTADOR DE ARREGLO SERIAL INICIADO
-        XX[i] = fgetc(GPS);
-        
-       //i++;
-      // }
-       lcd_gotoxy(1,4);
-       printf(lcd_putc,"%c%c%c%c%c%c%c%c%c%c",XX[0],XX[1],XX[2],XX[3],XX[4],XX[5],XX[6],XX[7],XX[8],XX[9]);
-       if( (XX[0]>=65)&&(XX[0]<=90) ){//validar no sea ruido
-          while (i <= word_size){
-                XX[i] = fgetc(GPS);
-                i++;
-          }
-          if(XX[1]=='R') XX[0]='G';
-          j=1;
-       }///
-       sub_cta1=sub_cta2=sub_cta3=sub_cta4=sub_cta5=sub_cta6=0;
-   }//end gps
-   */
-   
+ 
 }
  //------------------------------------------------------------------------------ 
 
    if(j==1){//Revisa si hubo datos por cualquiera de los 2 puertos seriales
-      
-      // fprintf(monitor,"%s",XX);//4
-      
       rd_eeprom();//valida dato recibido para ver si es una palabra de control
-      //int caso_valor = evaluar_string("BORRAR_ALL\r");
-      //fprintf(monitor,"XX:%s",XX);
       caso_valor = evaluar_string(XX);
-      //int caso_valor;
-      //evaluar_string('B');
-      //char textosearch[]= "PASAJEROS:";
-     // fprintf(monitor,"compare = %s", strstr(XX,textosearch));
-      //if((strstr(XX,textosearch))==0)b=5;
       lcd_gotoxy(9,1);
-      //printf(lcd_putc,"%Ld ",b);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
       printf(lcd_putc,"%d ",caso_valor);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
 
-      
-      //switch (b) {
       switch (caso_valor) {
           case 1: {//Se pone en 0 la cuenta
                   limpiar();
@@ -534,17 +391,13 @@ while (kbhit(GPS)!=1 || cntbnd >= 200)
                   printf(lcd_putc,"c=0");
                   }
       }//end switch
+
       caso_valor=0;
-      //lcd_gotoxy(9,1);
-      //printf(lcd_putc,"%Ld ",b);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
-      //printf(lcd_putc,"%d ",caso_valor);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
-      //delay_ms(3000);
       memset(XX, 0, sizeof(XX) );
       time_clr=0;
       f_clr=1;
       j=0;
    }
-   //if( (time_envio>=180)&&(master) ){//Revisa tiempo para transmitir por GPRS (time_envio esta en segundos, 180s/60 = 3min)
     if( (time_envio>=10)&&(master) ){//Revisa tiempo para transmitir por GPRS (time_envio esta en segundos, 180s/60 = 3min)
          solicitar();
         
@@ -629,8 +482,7 @@ void envio_master(){//reporta al maestro
     lcd_gotoxy(9,3);//cronometro para limpiar
     lcd_putc(0xAB);
     //fprintf(monitor,"PASAJEROS:%04Ld/%04Ld/%03Ld/%04Lu/\r",entraront,salieront,cta_bloqueo,envit );
-      fprintf(monitor,"PASAJEROS:\r");
-     // fprintf(monitor,"PASAJEROS\r%04Ld/%04Ld/%03Ld/%04Lu/\r",entraront,salieront,cta_bloqueo,envit );
+    fprintf(monitor,"PASAJEROS:\r");
 }
 
 int convertir_to_entero(char *cadena) {
@@ -663,37 +515,11 @@ void enviop1(){//Convierte a enteros la cadena recibida por el poste esclavo
    memset(bloqueado, 0, sizeof(tempo_tc));//total
    i=10;
    ii=0;
-   /*
-   for(ii=0;ii<=3;ii++)  entran[ii]=XX[10 +ii];
-   for(ii=0;ii<=3;ii++)  salen[ii]=XX[15 +ii];
-   for(ii=0;ii<=2;ii++)  bloqueado[ii]=XX[20 +ii];
-   for(ii=0;ii<=3;ii++)  tempo_tc[ii]=XX[24 +ii];
-   */
-   /*
-   char cadena[] = "Hola,mundo,soy,una,cadena,separa,por,comas",
-   delimitador[] = ",";
-   char *token = strtok(cadena, delimitador);
-       if(token != NULL){
-        while(token != NULL){
-            // Sólo en la primera pasamos la cadena; en las siguientes pasamos NULL
-           // printf("Token: %s\n", token);
-            token = strtok(NULL, delimitador);
-        }
-       }
-       */
-   
-   
-
- 
-   //strcpy(string,XX);
-   //char str[] ="This is - www.tutorialspoint.com - website";
    strcpy(term,":/");
    ptr = strtok(XX, term);
-   //lcd_gotoxy(9,2);
-   //printf(lcd_putc,"%s",ptr);
+
     int conteo_wl=0;
-  // while(ptr!=0) {
-         
+   
          strcpy(data1,ptr);                        // 1ra Palabra
          strcpy(data2, strtok(NULL , term));       // 2ra Palabra
          strcpy(data3, strtok(NULL , term));       // 3ra Palabra
@@ -702,7 +528,6 @@ void enviop1(){//Convierte a enteros la cadena recibida por el poste esclavo
          ptr = strtok(0, term);
          
          
-         //ptr = strtok(0, term);
          conteo_wl++;
          sub_atras = atoi32(data2);
          baj_atras = atoi32(data3);
@@ -710,41 +535,7 @@ void enviop1(){//Convierte a enteros la cadena recibida por el poste esclavo
           printf(lcd_putc,"S2:%Ld ",sub_atras);
           lcd_gotoxy(14,4);
           printf(lcd_putc,"B2:%Ld ",baj_atras);
-          //delay_ms(3000);
-         
-         /*
-         printf(lcd_putc,"\f");
-         lcd_gotoxy(1,1);
-         printf(lcd_putc,"%s->%ld",data2,sub_atras);
-         lcd_gotoxy(1,2);
-         printf(lcd_putc,"%s->%ld",data3,baj_atras);
-         lcd_gotoxy(1,3);
-         printf(lcd_putc,"%s",data4);
-         lcd_gotoxy(1,4);
-         printf(lcd_putc,"%s",data5);
-        delay_ms(5000);
-        */
-         
-      //}
-      
-      
-   //char conteo_poste_trasero;
-   //strncpy (conteo_poste_trasero, XX,  10);
-   /*
-   strcpy ( entran, data2);
-   entran[4] = '\0';   // null character manually added 
-   strcpy ( salen, data3);
-   salen[4] = '\0';   // null character manually added 
-   strcpy ( bloqueado, data4);
-   bloqueado[3] = '\0';   // null character manually added 
-   strcpy ( tempo_tc, data5);
-   tempo_tc[4] = '\0';   //null character manually added 
-   */
-   //lcd_gotoxy(12,2);
-   //printf(lcd_putc,"%c%c",data1[0],data1[8]);
-   
-//!   lcd_gotoxy(15,3);//
-//!   printf(lcd_putc,"A:%c%c%c%c",tempo_tc[0],tempo_tc[1],tempo_tc[2],tempo_tc[3]);
+
 }
 
 void envio(){//crea paquete para enviar al modulo GPRS
@@ -758,16 +549,10 @@ void envio(){//crea paquete para enviar al modulo GPRS
    if(convertir_to_entero(entran[1]) >0) for(i=0;i< convertir_to_entero(entran[1]);i++) temporal1=temporal1+100;
    if(convertir_to_entero(entran[2]) >0) for(i=0;i< convertir_to_entero(entran[2]);i++) temporal1=temporal1+10;
    
-   //sub_atras = atol(entran);
-  // sub_atras = atoi32(data2);
-   //sub_atras=temporal1=temporal1+convertir_to_entero(entran[3]);
    
    if(convertir_to_entero(salen[0]) >0) for(i=0;i< convertir_to_entero(salen[0]);i++) temporal2=temporal2+1000;
    if(convertir_to_entero(salen[1]) >0) for(i=0;i< convertir_to_entero(salen[1]);i++) temporal2=temporal2+100;
    if(convertir_to_entero(salen[2]) >0) for(i=0;i< convertir_to_entero(salen[2]);i++) temporal2=temporal2+10;
-   //baj_atras = atol(salen);
-   //baj_atras = atoi32(data3);
-   //baj_atras=temporal2=temporal2+convertir_to_entero(salen[3]);
    
    if(convertir_to_entero(bloqueado[0]) >0) for(i=0;i< convertir_to_entero(bloqueado[0]);i++) temporal3=temporal3+100;
    if(convertir_to_entero(bloqueado[1]) >0) for(i=0;i< convertir_to_entero(bloqueado[1]);i++) temporal3=temporal3+10;
@@ -776,13 +561,7 @@ void envio(){//crea paquete para enviar al modulo GPRS
    entran1=(entraront+salieront)/2;
    
    total2_t=(temporal1+temporal2)/2;
-   //////////////////
-//!   lcd_gotoxy(16,1);//
-//!   printf(lcd_putc,"S:%Lu",total2_t);
-//!   lcd_gotoxy(16,2);//
-//!   printf(lcd_putc,"R:%Lu",tempo_tn);
-   
-   /////////////////
+
    leer_conta2();
    if( total2_t== tempo_tn ) {//dato recibido correcto
          salian=salen1=total2_t;
@@ -796,13 +575,10 @@ void envio(){//crea paquete para enviar al modulo GPRS
    //fprintf(GPS,"ACC+01:%04Lu,%04Lu,%04Lu,%04Lu,%04Lu,%03Lu,%03Lu,%02u,\r\n",pasajet,entraront,salieront,temporal1,temporal2,cta_bloqueo,temporal3,error);
    fprintf(GPS,"ACC+01:%04Lu,%04Lu,%04Lu,%03Lu,%03Lu,%02u,\r\n",pasajet,entran1,salen1,cta_bloqueo,temporal3,error);
    lcd_cuentas();
-   ///////////////////////////
-//!   lcd_gotoxy(8,4);
-//!   printf(lcd_putc,"M:%Ld E:%Ld T:%Ld ",entran1,salen1,pasajet);
+
    lcd_gotoxy(9,3);//cronometro para limpiar
    lcd_putc(0xAB);
-   //lcd_gotoxy(9,4);//cronometro para limpiar
-   //lcd_putc("    ");
+
    clear_lcd1=1;
    time_lcd1=0;
    /////////////////////////////
@@ -884,11 +660,7 @@ void detecta_suma(){//Realiza suma de entradas o salidas
    }//fin suma sin bloqueos
    else if( (en_b1)||(en_b2)||(en_b3) ){//contar con bloqueos
             lim_b= en_b1+ en_b2+ en_b3;
-//!            lcd_gotoxy(9,2);//habilitar unicamente para hacer diagnosticos
-//!            printf(lcd_putc,"lim_b:%u ",lim_b);//habilitar unicamente para hacer diagnosticos
-//!            lcd_gotoxy(9,3);//habilitar unicamente para hacer diagnosticos
-//!            printf(lcd_putc,"se:%u ss:%u ",sen_ent,sen_sal);//habilitar unicamente para hacer diagnosticos
-            
+   
             if(lim_b==1){//un solo bloqueo
                if(en_b1){
                   if( (!detec3)&&(!detec4)&&(!detec5)&&(!detec6) ){
@@ -951,8 +723,7 @@ void detecta_suma(){//Realiza suma de entradas o salidas
 }
 
 void finsuma(){//Pinta en LCD la nueva cifra de entrada o salida
-//!      lcd_gotoxy(9,4);//habilitar unicamente para hacer diagnosticos
-//!      printf(lcd_putc,"se:%u ss:%u ",sen_ent,sen_sal);//habilitar unicamente para hacer diagnosticos
+
       pasaje=(entraront+salieront)/2;
       lcd_cuentas();
       sen_ent=0;
@@ -1552,61 +1323,8 @@ void rd_eeprom_inicio(){//
        }
        fprintf(monitor,"memory:%s\r",memory);
        n=n+word_size;//WORD_SIZE=30
-       //restart_wdt();
    }
 }
-
-/*
-void llaves(){//Graba las instrucciones de control en eeprom
-int tem;
-///TEXTO8 DIRECCIONES 0-8 YA NO SE USAN son para almacenar registros de cuentas
-   for(tem=1;tem<=data_set;tem++){
-      switch (tem) {
-        case 1:{for (i=0;i<word_size;++i)  texto[i]=texto1[i];
-              break;}
-        case 2:{for (i=0;i<word_size;++i)  texto[i]=texto2[i];
-              break;}
-        case 3:{for (i=0;i<word_size;++i)  texto[i]=texto3[i];
-              break;}
-        case 4:{for (i=0;i<word_size;++i)  texto[i]=texto4[i];
-              break;}
-        case 5:{for (i=0;i<word_size;++i)  texto[i]=texto5[i];
-              break;}
-        case 6:{for (i=0;i<word_size;++i)  texto[i]=texto6[i];
-              break;}
-        case 7:{for (i=0;i<word_size;++i)  texto[i]=texto7[i];
-              break;}
-        case 8:{for (i=0;i<word_size;++i)  texto[i]=texto8[i];
-              break;}
-        case 9:{for (i=0;i<word_size;++i)  texto[i]=texto9[i];
-              break;}
-      }
-      a=i=0;
-      while (i < word_size) {  //word_size=8
-              memory[i] = read_eeprom((tem*word_size)+i);
-              fprintf(monitor,"tx[]:%s",texto);
-              if (memory[i] != texto[i]){
-             // fprintf(monitor,"es diferente.");
-              break;
-              }
-              i++;
-              if (i==word_size){
-             // fprintf(monitor,"a=1");
-              a=1;
-              }
-      }
-      if (a==0){
-         i=0;
-         fprintf(monitor,"e.");
-        // fprintf(monitor,"texto[]:%s",texto);
-         while (texto[i] != 0x00){
-            write_eeprom(i+(tem*word_size),texto[i]);
-            i++;
-         }
-      }
-   }//end for
-}
-*/
 
 void lcd_cuentas(){//Escribe las cuenta en LCD 
     lcd_gotoxy(1,1);
@@ -1618,7 +1336,6 @@ void lcd_cuentas(){//Escribe las cuenta en LCD
        printf(lcd_putc,"B1:%Ld ",salieront);
        lcd_gotoxy(14,3);
        printf(lcd_putc,"S2:%Ld ",sub_atras);
-       //printf(lcd_putc,"N2:");
        lcd_gotoxy(14,4);
        printf(lcd_putc,"B2:%Ld ",baj_atras);
     }
@@ -1630,7 +1347,6 @@ void lcd_cuentas(){//Escribe las cuenta en LCD
        lcd_putc("B1:    ");
        lcd_gotoxy(14,3);
        printf(lcd_putc,"S2:%Ld ",entraront);
-       //printf(lcd_putc,"S2:v");
        lcd_gotoxy(14,4);
        printf(lcd_putc,"B2:%Ld ",salieront);
     }
@@ -1717,7 +1433,6 @@ void reset(){
       case MCLR_FROM_RUN://avisa que reinicio por master clear
       {  
          fprintf(monitor,"SERIALTEST\r\n");
-         //fprintf(monitor,"0\r");
          break;}
       case BROWNOUT_RESTART://avisa que el pic reinicio por un voltaje menor a 4v
       {
@@ -1729,38 +1444,26 @@ void reset(){
    }
 }
 
-
+//// evalua el comando obetenido del serial nato ///////////////////
 int evaluar_string(char *command[]){
-  // fprintf(monitor,"<");
-  // fprintf(monitor,"%s",command);
-  // fprintf(monitor,">");
    int conteo_command=0;
    int iresult;
+//// recorremos los 11 comandos definidos en textosearxch[] ////////
    while(conteo_command<=10){
-   //lcd_gotoxy(9,4);
-   //printf(lcd_putc,"%c%c%c",command[0],command[1],command[8]);//pinta en lcd si el numero de caso detectado (9 significa que no es un dato valido)
    iresult=strcoll(textosearch[conteo_command],command);
-  // fprintf(monitor,"%d",iresult);
-  // fprintf(monitor,"%s",textosearch[conteo_command]);
+//// si se encontró el comando en la lista entonces deja de buscar //
    if(iresult==0){
-  // fprintf(monitor,"Encontrado");
-   //return (conteo_command);
    break;
    }
-   //if(conteo_command==5){
-     
-
-   //}
-  
    conteo_command++;
    }
+
+//// si parte del comando es o empieza con "ASAJEROS" entra caso 5 //
       if(XX[1]=='A' && XX[2]=='S' && XX[3]=='A' && XX[4]=='J' && XX[5]=='E' && XX[6]=='R' && XX[7]=='O' && XX[8]=='S')
       {
          conteo_command = 5;
-        // lcd_gotoxy(9,2);
-        // printf(lcd_putc,"C=5");
       }
-    
+/// retorna valor de comando para validar ///////////////////////////
    return conteo_command;
 
    }

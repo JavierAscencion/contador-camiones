@@ -457,7 +457,7 @@ Project Directory:
     D:\PROYECTOS\TRANSPORTE\ENCAPSULADO NUEVO\Contadores_V5.02\MASTER\
 
 Project Files:
-    CONTADOR_V5.c                                           [06-may.-22 11:16  CRC=381720AF]
+    CONTADOR_V5.c                                           [06-may.-22 13:14  CRC=2D04B307]
     C:\Program Files (x86)\PICC\Devices\18F4580.h           [18-abr.-14 17:57  CRC=D6F2A36B]
     C:\Program Files (x86)\PICC\Drivers\stdlib.h            [08-jun.-11 15:39  CRC=0B6669CF]
     C:\Program Files (x86)\PICC\Drivers\stddef.h            [16-jul.-10 10:27  CRC=897CEC6C]
@@ -467,7 +467,7 @@ Project Files:
     LCD_4x20.c                                              [26-ago.-21 16:46  CRC=602D58D3]
     24256_eeprom.c                                          [26-ago.-21 16:46  CRC=E1DA8CD4]
 
-Source signature=A95EEA77
+Source signature=9E4C7CCF
 
 Units:
     CONTADOR_V5 (main)

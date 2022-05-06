@@ -365,7 +365,7 @@ D23_L29=[50438]Started Editing.
 D23_L30=[52130]Stopped Editing.
 D23_L31=[52137]Project Closed.
 D24=06-05-2022
-D24_L=17
+D24_L=19
 D24_L1=[30961]Project Opened.
 D24_L2=[31177]Started Editing.
 D24_L3=[31513]Stopped Editing.
@@ -385,6 +385,8 @@ D24_E=48
 D24_D=0
 D24_L16=[42004]Project Closed.
 D24_L17=[42027]Project Opened.
+D24_L18=[42120]Started Editing.
+D24_L19=[42826]Stopped Editing.
 
 [Opened Files]
 1=CONTADOR_V5.c
