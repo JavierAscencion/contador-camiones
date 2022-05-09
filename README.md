@@ -7,3 +7,5 @@ Es necesario montar el módulo GPRS para que puedan operar lo sensores porque si
 Se hicieron ajustes al código fuente original para que pudiera cominicarse sin errores por medio del puerto serial PIC-PIC, se cambiaron lista de comandos que se escribian y leian en memoria eeprom,
 ahora se graban en código y se validan por medio de funciones del stdio.h, asi se vuelve seguro las validaciones, se recibe dato serial de GPRS por medio de banderas como interrupciones,
 es decir hay pines dedicados en el GPRS y PIC para sincronizar la captura serial y confirmación en PIC y GPRS.
+
+Para la programación de los PIC´s es necesario saber cual es el maestro y cual el esclavo de los postes para cargar el firmware correcto
